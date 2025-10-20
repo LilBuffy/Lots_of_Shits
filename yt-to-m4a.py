@@ -1,11 +1,15 @@
-import yt_dlp # very important.
+import yt_dlp
+import os
+import re
 
-# this shit grabs a youTube link, then rips the audio straight into an .m4a file.
+print("\n [ -- YT TO M4A DOWNLOADER BY HITLER -- ]")
 
-save_path = r"FUCKING PATH"  # example: C:\Users\...\Downloads
+# THE PATH WHERE YOU WANT TO SAVE YOUR SHIT
+# Example: C:\Users\Nignog\Downloads\python_niggies\soundtrip
+save_path = r"#" # SET THIS SHIT UP NOW OR I'LL TOUCH YOU
 
 ydl_opts = {
-    'format': 'bestaudio/best',
+    'format': 'bestaudio[ext=m4a]/bestaudio/best',
     'outtmpl': f'{save_path}/%(title)s.%(ext)s',
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
@@ -14,18 +18,47 @@ ydl_opts = {
     }],
 }
 
-url = "https://youtu.be/U06jlgpMtQs?si=ej_2yacEZBDY9jvt" # or url = input("gimme ur link")
+def clean_url(link):
 
-try:
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        # extract fucking infos without downloading first
-        info = ydl.extract_info(url, download=False)
-        title = info.get("title", "Unknown Title")
-        print(f"\nGrabbing: {title}\n")
+    # Cleanup link
+    link = link.strip()
 
-        # now download
-        ydl.download([url])
-        print(f"\nDONE YOU SPECKY LITTLE SHIT. FILE SAVED AT: {save_path}\n")
+    # Add https:// if missing
+    if not re.match(r'^https?://', link):
+        link = 'https://' + link
 
-except Exception as e:
-    print(f"\nHOLY FUCK SOMETHING WENT WRONG: {e}\n")
+    # Common YouTube shorteners
+    if 'youtu.be' in link or 'youtube.com' in link:
+        return link
+    return None
+
+def is_valid_url(link):
+    # Check if looks like a valid YouTube URL
+    pattern = r'(https?://)?(www\.)?(youtube\.com|youtu\.be)/.+'
+    return re.match(pattern, link)
+
+# Magic happens here :D
+while True:
+    
+    url = input("\n[!] GIMME THE YOUTUBE LINK: ").strip()
+    url = clean_url(url)
+
+    if not url or not is_valid_url(url):
+        print("\n[!] INVALID YOUTUBE LINK YOU SPECKY LITTLE SHIT\n")
+        continue
+
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            title = info.get("title", "Unknown Title")
+            print(f"\n[!] GRABBING: {title}\n")
+
+            ydl.download([url])
+            print(f"\n[!] SUCCESSFULLY DOWNLOADED THIS SHIT: {title}")
+            print(f"\n[!] FILE SAVED AT: {save_path}\n")
+            print("[!] DAVAIIIII RETARD, YOU'RE DONE. EXITING...\n")
+            break  # ONLY BREAKS WHEN SUCCESSFUL DOWNLOAD OK?
+
+    except Exception as e:
+        print(f"\n[!] HOLY FUCKING SHIT, SOMETHING WENT WRONG:\n{e}\n")
+        print("\n[!] TRY AGAIN RETARD\n")

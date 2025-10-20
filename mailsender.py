@@ -2,11 +2,11 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-# this is why i get banned from people inboxes.
+# This is why i get banned from people inboxes.
 
-sender_email = "...@gmail.com" # your gmail here
-sender_password = "kjuiwhxnoqjdklad" # app password here (16 characters + 2FA)
-receiver_email = "...@gmail.com" # your target gmail >:D
+sender_email = "...@gmail.com" # Your gmail here
+sender_password = "kjuiwhxnoqjdklad" # App password here (16 characters + 2FA)
+receiver_email = "...@gmail.com" # Your target gmail >:D
 subject = "Good day, Fuhrer."
 message = "Testing Testing nein nein mein kampf 卐"
 
@@ -28,7 +28,7 @@ finally:
    server.quit()
 
 
-# for multi dudes, im tired...
+# For multi dudes, im tired...
 
 """
 RECEIVERS = ["retard1@example.com", "retard2@example.com"] # replace with real addresses

@@ -1,7 +1,7 @@
 import requests
 
-# philippines and this is inaccurate btw
-# dont expect this to be 100% accurate. this is fucked up.
+# Philippines, and this is inaccurate btw
+# Don't expect this to be 100% accurate. this is fucked up.
 
 def get_weather(city):
     url = f"https://wttr.in/{city}?format=j1"  # j1 = FUCKING JSON format
@@ -27,7 +27,7 @@ def get_weather(city):
         print("\nERROR BEEP BOOP FUCK YOU.")
         return None
 
-    # simplified info because i hate ni-
+    # Simplified info because why not?
     try:
         current = data["current_condition"][0]
         return {

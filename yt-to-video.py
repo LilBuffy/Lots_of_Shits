@@ -2,28 +2,58 @@ from pytubefix import YouTube
 from pytubefix.exceptions import RegexMatchError, VideoUnavailable
 import re, os
 
-# this time in full hd video.
+print("\n [ -- YT TO VIDEO DOWNLOADER BY HITLER -- ]")
 
-save_path = r"FUCKING PATH" # example: C:\Users\...\Downloads
+# THE PATH WHERE YOU WANT TO SAVE YOUR SHIT
+# Example: C:\Users\Nignog\Downloads\python_niggies\soundtrip
+save_path = r"#"  # SET THIS SHIT UP NOW OR I'LL TOUCH YOU
 
-link = input("\nENTER YOUTUBE VIDEO LINK: ").strip()
-clean_link = link.split("?")[0]
+def clean_url(link):
 
-try:
-    yt = YouTube(clean_link)
-    print("\nVIDEO TITLE:", yt.title)
+    # Cleanup link
+    link = link.strip()
 
-    # anti stupidity
-    safe_title = re.sub(r'[<>:"/\\|?*]', '', yt.title) + ".mp4"
+    # Add https:// if missing
+    if not re.match(r'^https?://', link):
+        link = 'https://' + link
+    
+    # Common YouTube shorteners
+    if 'youtu.be' in link or 'youtube.com' in link:
+        return link
+    return None
 
-    stream = yt.streams.get_highest_resolution()
-    stream.download(output_path=save_path, filename=safe_title)
+def is_valid_url(link):
+    # Check if looks like a valid YouTube URL
+    pattern = r'(https?://)?(www\.)?(youtube\.com|youtu\.be)/.+'
+    return re.match(pattern, link)
 
-    print("\nDONE BRO. SAVED AT:", os.path.join(save_path, safe_title), "\n")
+# Magic happens here :DDDDDDD
+while True:
+    link = input("\n[!] GIMME THE YOUTUBE LINK: ").strip()
+    url = clean_url(link)
 
-except RegexMatchError:
-    print("\nYOU ENTERED INVALID YOUTUBE LINK YOU ABSOLUTE RETARD.\n")
-except VideoUnavailable:
-    print("\nVIDEO IS UNAVAILABLE GO FCK YOURSELF.\n")
-except Exception as e:
-    print("\nSOMETHING WENT WRONG LMAO:", e, "\n")
+    if not url or not is_valid_url(url):
+        print("\n[!] INVALID YOUTUBE LINK YOU SPECKY LITTLE SHIT\n")
+        continue
+
+    clean_link = url.split("?")[0]
+
+    try:
+        yt = YouTube(clean_link)
+        print(f"\n[!] DOWNLOADING... VIDEO TITLE: {yt.title}")
+
+        safe_title = re.sub(r'[<>:"/\\|?*]', '', yt.title) + ".mp4"
+        stream = yt.streams.get_highest_resolution()
+        stream.download(output_path=save_path, filename=safe_title)
+
+        print(f"\n[!] SUCCESS! SAVED AT: {os.path.join(save_path, safe_title)}\n")
+        print("[!] DAVAIIIII RETARD, YOU'RE DONE. EXITING...\n")
+        break  # ONLY BREAKS WHEN SUCCESSFUL DOWNLOAD.!111!1
+
+    except RegexMatchError:
+        print("\nHEY RETARD, INVALID LINK FORMAT! TRY AGAIN!\n")
+    except VideoUnavailable:
+        print("\nTHIS VIDEO IS UNAVAILABLE, PICK ANOTHER ONE.\n")
+    except Exception as e:
+        print(f"\nSOMETHING WENT HORRIBLY WRONG, LOLZ: {e}\n")
+        print("TRY AGAIN, RETARD!\n")
