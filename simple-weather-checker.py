@@ -9,22 +9,22 @@ def get_weather(city):
         resp = requests.get(url, timeout=10)
         resp.raise_for_status()
     except requests.exceptions.HTTPError as http_err:
-        print(f"\nFUCKING HTTP ERROR SHIT: {http_err}")
+        print(f"\n[!] FUCKING HTTP ERROR SHIT: {http_err}")
         return None
     except requests.exceptions.ConnectionError as conn_err:
-        print(f"\nYOUR CONNECTION SUCKS: {conn_err}")
+        print(f"\n[!] YOUR CONNECTION SUCKS: {conn_err}")
         return None
     except requests.exceptions.Timeout as timeout_err:
-        print(f"\nTOOK TOO LONG THIS SHIT SUX: {timeout_err}")
+        print(f"\n[!] TOOK TOO LONG THIS SHIT SUX: {timeout_err}")
         return None
     except requests.exceptions.RequestException as err:
-        print(f"\nIDK WHAT CAUSED THIS ERROR: {err}")
+        print(f"\n[!] IDK WHAT CAUSED THIS ERROR: {err}")
         return None
 
     try:
         data = resp.json()
     except ValueError:
-        print("\nERROR BEEP BOOP FUCK YOU.")
+        print("\n[!] ERROR BEEP BOOP FUCK YOU.")
         return None
 
     # Simplified info because why not?
@@ -37,12 +37,12 @@ def get_weather(city):
             "feels_like": current["FeelsLikeC"]
         }
     except (KeyError, IndexError) as parse_err:
-        print(f"\nDATAS FAILED TO FUCK YOU: {parse_err}")
+        print(f"\n[!] DATAS FAILED TO FUCK YOU: {parse_err}")
         return None
 
 
 if __name__ == "__main__":
-    city = input("\nEnter city in Philippines: ")
+    city = input("\n[!] Enter city in Philippines: ")
     weather = get_weather(city)
     if weather:
         print(f"\nWeather in {city}:")
@@ -50,4 +50,4 @@ if __name__ == "__main__":
         print(f"Humidity: {weather['humidity']}%")
         print(f"Condition: {weather['description']}\n")
     else:
-        print("IM NOT GONNA FETCH THE WEATHERS BECAUSE YOU ARE STUPID SHIT.\n")
+        print("[!] IM NOT GONNA FETCH THE WEATHERS BECAUSE YOU ARE STUPID SHIT.\n")
